@@ -41,19 +41,10 @@ class Matrix
     public function searchPrimes() : array
     {
         $primes = [];
-        for ($i = 0; $i < $this->size; $i++) {
-            for ($j = 0; $j < $this->size; $j++) {
+        for ($row = 0; $row < $this->size; $row++) {
+            for ($col = 0; $col < $this->size; $col++) {
                 foreach ($this->steps as $step) {
-                    $row = $i;
-                    $col = $j;
-                    $curr = $this->matrix[$row][$col];
-                    $this->addPrime($curr, $primes);
-                    while (isset($this->matrix[$row + $step[0]][$col + $step[1]])) {
-                        $curr .= $this->matrix[$row + $step[0]][$col + $step[1]];
-                        $this->addPrime($curr,$primes);
-                        $row += $step[0];
-                        $col += $step[1];
-                    }
+                    $this->walkStep($step, $row, $col, $primes);
                 }
             }
         }
@@ -62,6 +53,17 @@ class Matrix
         return $primes;
     }
 
+    private function walkStep(array $step, int $row, int $col, array &$primes)
+    {
+        $curr = $this->matrix[$row][$col];
+        $this->addPrime($curr, $primes);
+        while (isset($this->matrix[$row + $step[0]][$col + $step[1]])) {
+            $curr .= $this->matrix[$row + $step[0]][$col + $step[1]];
+            $this->addPrime($curr,$primes);
+            $row += $step[0];
+            $col += $step[1];
+        }
+    }
     private function addPrime($value, &$primes)
     {
         if ($this->checker->isPrime($value) && !in_array($value, $primes)) {
