@@ -1,5 +1,6 @@
 <?php
 
+use Console\Console;
 use Matrix\Matrix;
 use NumberLogic\PrimeNumberChecker;
 
@@ -9,10 +10,8 @@ spl_autoload_register(function ($className) {
 });
 
 $checker = new PrimeNumberChecker();
-$matrix = new Matrix($checker);
-$primes = $matrix->searchPrimes();
-echo 'There are ' . count($primes) . " prime numbers \n";
-$primes = array_chunk($primes, 5);
-foreach ($primes as $primeChunk) {
-    echo implode(', ', $primeChunk) . "\n";
-}
+$ini = parse_ini_file('config.ini');
+$matrix = new Matrix($checker, $ini['matrix']);
+
+$console = new Console($matrix);
+$console->printPrimes();

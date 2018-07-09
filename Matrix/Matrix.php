@@ -21,10 +21,15 @@ class Matrix
         [1, 1],
     ];
 
-    public function __construct(PrimeNumberChecker $checker)
+    /**
+     * Matrix constructor.
+     * @param PrimeNumberChecker $checker
+     * @param string $file
+     */
+    public function __construct(PrimeNumberChecker $checker, string $file)
     {
         $this->checker = $checker;
-        $file = new SplFileObject('Matrix/matrix.txt');
+        $file = new SplFileObject($file);
         $data = [];
         while (!$file->eof()) {
             $data[] = str_replace("\r\n", '', $file->current());
